@@ -96,7 +96,6 @@ struct PlaceHolderView: View {
     }
 }
 
-@main
 struct EmojiRangerWidget: Widget {
     let kind: String = "EmojiRangerWidget"
 

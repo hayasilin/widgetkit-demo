@@ -20,16 +20,18 @@ struct AllCharactersView: View {
             ForEach(
                 characters.sorted { $0.healthLevel > $1.healthLevel }, id: \.self) { character in
                 Link(destination: character.url) {
-                    HStack {
-                        Avatar(character: character)
-                        VStack(alignment: .leading) {
-                            Text(character.name)
-                                .font(.headline)
-                                .foregroundColor(.white)
-                            Text("Level \(character.level)")
-                                .foregroundColor(.white)
-                            HealthLevelShape(level: character.healthLevel)
-                                .frame(height: 10)
+                    Link(destination: character.url) {
+                        HStack {
+                            Avatar(character: character)
+                            VStack(alignment: .leading) {
+                                Text(character.name)
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                Text("Level \(character.level)")
+                                    .foregroundColor(.white)
+                                HealthLevelShape(level: character.healthLevel)
+                                    .frame(height: 10)
+                            }
                         }
                     }
                 }
