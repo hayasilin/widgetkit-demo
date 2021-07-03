@@ -86,7 +86,6 @@ struct EmojiRangerWidgetEntryView : View {
                 .widgetURL(entry.character.url)
             }
             .background(Color.gameBackground)
-            .widgetURL(entry.character.url)
         }
     }
 }
