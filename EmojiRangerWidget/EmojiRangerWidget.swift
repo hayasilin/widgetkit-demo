@@ -14,12 +14,12 @@ struct Provider: IntentTimelineProvider {
         SimpleEntry(date: Date(), character: .panda, relevance: nil)
     }
 
-    func getSnapshot(for configuration: CharacterSelectionIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
+    func getSnapshot(for configuration: DynamicCharacterSelectionIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
         let entry = SimpleEntry(date: Date(), character: .panda, relevance: nil)
         completion(entry)
     }
 
-    func getTimeline(for configuration: CharacterSelectionIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    func getTimeline(for configuration: DynamicCharacterSelectionIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
 
         let selectedCharacter = character(for: configuration)
         let endDate = selectedCharacter.fullHealthDate
@@ -38,17 +38,13 @@ struct Provider: IntentTimelineProvider {
         completion(timeline)
     }
 
-    private func character(for configuration: CharacterSelectionIntent) -> CharacterDetail {
-        switch configuration.hero {
-        case .panda:
-            return .panda
-        case .egghead:
-            return .egghead
-        case .spouty:
-            return .spouty
-        default:
-            return .panda
+    func character(for configuration: DynamicCharacterSelectionIntent) -> CharacterDetail {
+        if let name = configuration.hero?.identifier, let character = CharacterDetail.characterFromName(name: name) {
+            // Save the last selected character to our App Group.
+            CharacterDetail.setLastSelectedCharacter(heroName: name)
+            return character
         }
+        return .panda
     }
 }
 
@@ -100,7 +96,7 @@ struct EmojiRangerWidget: Widget {
     let kind: String = "EmojiRangerWidget"
 
     var body: some WidgetConfiguration {
-        IntentConfiguration(kind: kind, intent: CharacterSelectionIntent.self, provider: Provider()) { entry in
+        IntentConfiguration(kind: kind, intent: DynamicCharacterSelectionIntent.self, provider: Provider()) { entry in
             EmojiRangerWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("Emoji Ranger Detail")
