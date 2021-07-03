@@ -10,24 +10,28 @@ import SwiftUI
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), character: .panda)
+        SimpleEntry(date: Date(), character: .panda, relevance: nil)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), character: .panda)
+        let entry = SimpleEntry(date: Date(), character: .panda, relevance: nil)
         completion(entry)
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        let entries: [SimpleEntry] = [SimpleEntry(date: Date(), character: .panda)]
 
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-//        let currentDate = Date()
-//        for hourOffset in 0 ..< 5 {
-//            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-//            let entry = SimpleEntry(date: entryDate)
-//            entries.append(entry)
-//        }
+        let selectedCharacter = CharacterDetail.panda
+        let endDate = selectedCharacter.fullHealthDate
+        let oneMinute: TimeInterval = 60
+        var currentDate = Date()
+
+        var entries: [SimpleEntry] = []
+        while currentDate < endDate {
+            let relevance = TimelineEntryRelevance(score: Float(selectedCharacter.healthLevel))
+            let entry = SimpleEntry(date: currentDate, character: selectedCharacter, relevance: relevance)
+            currentDate += oneMinute
+            entries.append(entry)
+        }
 
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
@@ -37,19 +41,43 @@ struct Provider: TimelineProvider {
 struct SimpleEntry: TimelineEntry {
     let date: Date
     let character: CharacterDetail
+    let relevance: TimelineEntryRelevance?
 }
 
 struct EmojiRangerWidgetEntryView : View {
     var entry: Provider.Entry
 
+    @Environment(\.widgetFamily) var family
+
+    @ViewBuilder
     var body: some View {
-        AvatarView(entry.character)
+        switch family {
+        case .systemSmall:
+            ZStack {
+                AvatarView(entry.character)
+                    .foregroundColor(.white)
+            }
+            .background(Color.gameBackground)
+        default:
+            ZStack {
+                HStack(alignment: .top) {
+                    AvatarView(entry.character)
+                        .foregroundColor(.white)
+                    Text(entry.character.bio)
+                        .padding()
+                        .foregroundColor(.white)
+                }
+                .padding()
+                .widgetURL(entry.character.url)
+            }
+            .background(Color.gameBackground)
+        }
     }
 }
 
 struct PlaceHolderView: View {
     var body: some View {
-        AvatarView(.panda)
+        EmojiRangerWidgetEntryView(entry: SimpleEntry(date: Date(), character: .panda, relevance: nil))
     }
 }
 
@@ -63,18 +91,21 @@ struct EmojiRangerWidget: Widget {
         }
         .configurationDisplayName("Emoji Ranger Detail")
         .description("Keep track of your favoite emoji ranger.")
-        .supportedFamilies([.systemSmall])
+        .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
 
 struct EmojiRangerWidget_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            AvatarView(.panda)
+            EmojiRangerWidgetEntryView(entry: SimpleEntry(date: Date(), character: .panda, relevance: nil))
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
 
+            EmojiRangerWidgetEntryView(entry: SimpleEntry(date: Date(), character: .panda, relevance: nil))
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+
             PlaceHolderView()
-                .previewContext(WidgetPreviewContext(family: .systemSmall))
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
                 .redacted(reason: .placeholder)
         }
     }
