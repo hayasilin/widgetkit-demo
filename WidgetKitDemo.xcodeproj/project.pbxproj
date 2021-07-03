@@ -33,6 +33,8 @@
 		65F917E3269053410015D6D4 /* HealthLevelShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653AA0C8268F56C300300B01 /* HealthLevelShape.swift */; };
 		65F917E4269053410015D6D4 /* ImageURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653AA0C0268F533B00300B01 /* ImageURLProtocol.swift */; };
 		65F917E5269053410015D6D4 /* AllCharactersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F917C026904E490015D6D4 /* AllCharactersView.swift */; };
+		65F917E726905BE40015D6D4 /* CharacterSelection.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 65F917E626905BE40015D6D4 /* CharacterSelection.intentdefinition */; };
+		65F917E826905BF30015D6D4 /* CharacterSelection.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 65F917E626905BE40015D6D4 /* CharacterSelection.intentdefinition */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +102,7 @@
 		65F917CF269052A20015D6D4 /* EmojiRangerWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiRangerWidget.swift; sourceTree = "<group>"; };
 		65F917D1269052A30015D6D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		65F917D3269052A30015D6D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		65F917E626905BE40015D6D4 /* CharacterSelection.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = CharacterSelection.intentdefinition; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				65F917CF269052A20015D6D4 /* EmojiRangerWidget.swift */,
+				65F917E626905BE40015D6D4 /* CharacterSelection.intentdefinition */,
 				65F917D1269052A30015D6D4 /* Assets.xcassets */,
 				65F917D3269052A30015D6D4 /* Info.plist */,
 			);
@@ -420,6 +424,7 @@
 				653AA0BF268F532300300B01 /* CharacterDetail.swift in Sources */,
 				653AA0C5268F54F200300B01 /* AvatarView.swift in Sources */,
 				65F917C326904EE50015D6D4 /* DetailView.swift in Sources */,
+				65F917E726905BE40015D6D4 /* CharacterSelection.intentdefinition in Sources */,
 				653AA0C7268F55B900300B01 /* CharacterNameView.swift in Sources */,
 				65F917C126904E490015D6D4 /* AllCharactersView.swift in Sources */,
 				653AA0C1268F533B00300B01 /* ImageURLProtocol.swift in Sources */,
@@ -456,6 +461,7 @@
 				65F917DF269053410015D6D4 /* GameColors.swift in Sources */,
 				65F917E2269053410015D6D4 /* AvatarView.swift in Sources */,
 				65F917E5269053410015D6D4 /* AllCharactersView.swift in Sources */,
+				65F917E826905BF30015D6D4 /* CharacterSelection.intentdefinition in Sources */,
 				65F917E0269053410015D6D4 /* CharacterNameView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

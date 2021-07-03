@@ -8,19 +8,20 @@
 import WidgetKit
 import SwiftUI
 
-struct Provider: TimelineProvider {
+struct Provider: IntentTimelineProvider {
+
     func placeholder(in context: Context) -> SimpleEntry {
         SimpleEntry(date: Date(), character: .panda, relevance: nil)
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
+    func getSnapshot(for configuration: CharacterSelectionIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
         let entry = SimpleEntry(date: Date(), character: .panda, relevance: nil)
         completion(entry)
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    func getTimeline(for configuration: CharacterSelectionIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
 
-        let selectedCharacter = CharacterDetail.panda
+        let selectedCharacter = character(for: configuration)
         let endDate = selectedCharacter.fullHealthDate
         let oneMinute: TimeInterval = 60
         var currentDate = Date()
@@ -35,6 +36,19 @@ struct Provider: TimelineProvider {
 
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
+    }
+
+    private func character(for configuration: CharacterSelectionIntent) -> CharacterDetail {
+        switch configuration.hero {
+        case .panda:
+            return .panda
+        case .egghead:
+            return .egghead
+        case .spouty:
+            return .spouty
+        default:
+            return .panda
+        }
     }
 }
 
@@ -58,6 +72,7 @@ struct EmojiRangerWidgetEntryView : View {
                     .foregroundColor(.white)
             }
             .background(Color.gameBackground)
+            .widgetURL(entry.character.url)
         default:
             ZStack {
                 HStack(alignment: .top) {
@@ -71,6 +86,7 @@ struct EmojiRangerWidgetEntryView : View {
                 .widgetURL(entry.character.url)
             }
             .background(Color.gameBackground)
+            .widgetURL(entry.character.url)
         }
     }
 }
@@ -86,7 +102,7 @@ struct EmojiRangerWidget: Widget {
     let kind: String = "EmojiRangerWidget"
 
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { entry in
+        IntentConfiguration(kind: kind, intent: CharacterSelectionIntent.self, provider: Provider()) { entry in
             EmojiRangerWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("Emoji Ranger Detail")
